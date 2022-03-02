@@ -16,9 +16,10 @@ if ($contents["rc_namespace"] % 2 == 1 || ($contents["rc_namespace"] == 4) && pr
         $result = json_decode($response,true);
         $old = $result["query"]["pages"][$contents["rc_cur_id"]]["revisions"][0]["*"]; // 旧ページ
     }
-    $response = file_get_contents($api . "?format=json&action=query&prop=revisions&rvprop=content&revids=".$contents["rc_this_oldid"]);
+    $response = file_get_contents($api . "?format=json&action=query&prop=revisions&rvprop=content|user&revids=".$contents["rc_this_oldid"]);
     $result = json_decode($response,true);
     $new = $result["query"]["pages"][$contents["rc_cur_id"]]["revisions"][0]["*"]; // 新ページ
+    $author = $result["query"]["pages"][$contents["rc_cur_id"]]["revisions"][0]["user"];
     
     $regex ="/{{m\|(\S.+?)}}/"; // メンションの正規表現
     
@@ -61,9 +62,10 @@ if ($contents["rc_namespace"] % 2 == 1 || ($contents["rc_namespace"] == 4) && pr
     loginRequest( $login_Token );
     $csrf_Token = getCSRFToken();
     $new_mention = array_unique($new_mention);
+    $admins = json_decode(file_get_contents("https://ja.scratch-wiki.info/w/api.php?action=query&format=json&list=allusers&augroup=sysop"), true)["query"]["allusers"]
     foreach($new_mention as $value){
         var_dump(return_ok($value));
-        if (return_ok($value)){
+        if (in_array($author, array_map(function($n){return $n["name"];}, $admins)) || return_ok($value)){ // メンションした人がsysopか、メンションされた人が受信するように設定しているとき
             editRequest($csrf_Token, "利用者・トーク:" . $value, $m . "~~~~"); // メンション通知を送信
         }
     }
