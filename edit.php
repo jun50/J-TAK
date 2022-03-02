@@ -8,8 +8,6 @@
     MIT license
 */
 
-require("data.php");
-
 $endPoint = $api;
 
 // Step 1: GET request to fetch login token
@@ -42,6 +40,8 @@ function getLoginToken() {
 // (https://www.mediawiki.org/wiki/Special:BotPasswords) for lgname & lgpassword
 function loginRequest( $logintoken ) {
 	global $endPoint;
+
+	require("data.php");
 
 	$params2 = [
 		"action" => "login",

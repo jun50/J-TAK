@@ -1,32 +1,17 @@
 <?php
-global $prepare, $prepare2, $prepare3;
-$dsn = 'mysql:dbname=jtak_db;host=localhost';
-$user = $dname;
-$password = $dpw;
-try {
-    $dbh = new PDO($dsn, $user, $password);
-    echo "接続成功\n";
-} catch (PDOException $e) {
-    echo "接続失敗: " . $e->getMessage() . "\n";
-    exit();
+
+function get_connection(){
+    require("data.php");
+    $dsn = 'mysql:dbname=jun50_JTAK;host=localhost';
+    $user = $dname;
+    $password = $dpw;
+    return new PDO($dsn, $user, $password);
 }
 
-$sql = "select * from consent where name = :name;";
-
-$prepare = $dbh->prepare($sql);
-
-$sql = "delete from consent where name = :name;";
-
-$prepare2 = $dbh->prepare($sql);
-
-$sql = "insert into consent values (:name, :tf);";
-
-$prepare3 = $dbh->prepare($sql);
-
 function return_ok($user) {
-    global $prepare;
+    $dbh = get_connection();
+    $prepare = $dbh->prepare("select * from consent where name = :name;");
     $prepare->bindValue(':name', $user, PDO::PARAM_STR);
-
     $prepare->execute();
 
     $result = $prepare->fetchAll(PDO::FETCH_ASSOC);
@@ -40,8 +25,10 @@ function return_ok($user) {
 }
 
 function true_false($user, $tf){
-    global $prepare2, $prepare3;
+    $dbh = get_connection();
+    $prepare2 = $dbh->prepare("delete from consent where name = :name;");
     $prepare2->bindValue(':name', $user, PDO::PARAM_STR);
+    $prepare3 = $dbh->prepare("insert into consent values (:name, :tf);");
     $prepare3->bindValue(':name', $user, PDO::PARAM_STR);
     $prepare3->bindValue(':tf', $tf, PDO::PARAM_INT);
 
