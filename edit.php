@@ -45,8 +45,8 @@ function loginRequest( $logintoken ) {
 
 	$params2 = [
 		"action" => "login",
-		"lgname" => $name,
-		"lgpassword" => $pw,
+		"lgname" => $wikiuser,
+		"lgpassword" => $wikipw,
 		"lgtoken" => $logintoken,
 		"format" => "json"
 	];
