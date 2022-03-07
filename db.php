@@ -17,7 +17,7 @@ function return_ok($user) {
     $result = $prepare->fetchAll(PDO::FETCH_ASSOC);
 
     // 結果を出力
-    if ($result[0]["tf"] == "1"){
+    if (!empty($result) && $result[0]["tf"] == "1"){
         return true;
     }else {
         return false;
