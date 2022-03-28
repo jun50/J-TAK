@@ -8,7 +8,7 @@ $message =
 }}";
 $json = file_get_contents("php://input");
 $contents = json_decode($json, true);
-if ($contents["rc_namespace"] % 2 == 1 || ($contents["rc_namespace"] == 4) && preg_match("/^Japanese_Scratch-Wiki:議論の場\//")) { // トークページか判別
+if ($contents["rc_namespace"] % 2 == 1 || ($contents["rc_namespace"] == 4 && str_starts_with($contents["rc_title"], "議論の場/"))) { // トークページか判別
     if ($contents["rc_last_oldid"] == 0){
         $old = "";
     } else {
@@ -62,7 +62,7 @@ if ($contents["rc_namespace"] % 2 == 1 || ($contents["rc_namespace"] == 4) && pr
     loginRequest( $login_Token );
     $csrf_Token = getCSRFToken();
     $new_mention = array_unique($new_mention);
-    $admins = json_decode(file_get_contents($api . "?action=query&format=json&list=allusers&augroup=sysop"), true)["query"]["allusers"];
+    $admins = json_decode(file_get_contents($api . "?action=query&format=json&list=allusers&augroup=sysop&aulimit=500"), true)["query"]["allusers"];
     foreach($new_mention as $value){
         var_dump(return_ok($value));
         if (in_array($author, array_map(function($n){return $n["name"];}, $admins)) || return_ok($value)){ // メンションした人がsysopか、メンションされた人が受信するように設定しているとき
