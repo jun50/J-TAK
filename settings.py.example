@@ -1,0 +1,4 @@
+BASE_NEKO = "https://ja.scratch-wiki.info/w/api.php"
+USER = "" # user name
+PASSWORD = "" # password
+NYADMINS = ['2003kaito', '227kei', 'Abee', 'Admin', 'Apple502j', 'ErnieParke', 'Jp86143', 'Jvvg', 'Kenny2scratch', 'Kokastar', 'Mtwoll', 'Poteto143', 'T-taku', '⧼abusefilter-blocker⧽', '不正利用フィルター'] # admin list
